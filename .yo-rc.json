@@ -47,6 +47,17 @@
     "serviceDiscoveryType": false,
     "enableHibernateCache": true,
     "reactive": false,
-    "languages": ["en", "fr"]
+    "languages": ["en", "fr"],
+    "entities": [
+      "Region",
+      "Country",
+      "Location",
+      "Department",
+      "Task",
+      "Employee",
+      "Job",
+      "JobHistory"
+    ],
+    "lastLiquibaseTimestamp": 1620541785000
   }
 }

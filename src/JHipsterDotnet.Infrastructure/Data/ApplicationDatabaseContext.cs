@@ -1,9 +1,11 @@
 using Jhipster.Domain;
 using Jhipster.Domain.Interfaces;
+using Jhipster.Crosscutting.Enums;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -26,6 +28,15 @@ namespace Jhipster.Infrastructure.Data
         {
             _httpContextAccessor = httpContextAccessor;
         }
+
+        public DbSet<Region> Regions { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Task> Tasks { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Job> Jobs { get; set; }
+        public DbSet<JobHistory> JobHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -61,6 +72,18 @@ namespace Jhipster.Infrastructure.Data
                 .HasForeignKey(e => e.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Job>()
+                .HasMany(x => x.Tasks)
+                .WithMany(x => x.Jobs)
+                .UsingEntity<Dictionary<string, object>>(
+                    "JobTasks",
+                    x => x.HasOne<Task>().WithMany(),
+                    x => x.HasOne<Job>().WithMany());
+
+            builder.Entity<JobHistory>()
+                .Property(e => e.Language)
+                .HasConversion<string>();
         }
 
         /// <summary>
